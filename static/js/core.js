@@ -14,17 +14,19 @@ var university_conversion = {
     'nom':'< Not Mentioned >'
 };
 
-var inverted_university_conversion = {'George Brown College': 'gbr', 'Humber College': 'hmb', 'University of Toronto (Scarborough)': 'scr', 'York University': 'yrk', 'University of Toronto (Mississauga)': 'msg', 'Centennial College': 'cen', 'Ryerson University': 'rye', 'OCAD University': 'ocd', '< Not Mentioned >': 'nom', 'University of Ontario Institute of Technology': 'oit', 'Seneca College': 'snc', 'University of Toronto (St.George)': 'stg','Sheridan College':'shr'};
+var inverted_university_conversion = {'George Brown College':'gbr', 'Humber College':'hmb', 'University of Toronto (Scarborough)':'scr', 'York University':'yrk', 'University of Toronto (Mississauga)':'msg', 'Centennial College':'cen', 'Ryerson University':'rye', 'OCAD University':'ocd', '< Not Mentioned >':'nom', 'University of Ontario Institute of Technology':'oit', 'Seneca College':'snc', 'University of Toronto (St.George)':'stg', 'Sheridan College':'shr'};
 
 var line_break = power('br');
-
-
 
 setInterval(time_engineer, 2000);
 
 
-function jamExists(jam){
-     return jam.length > 0;
+function validEmail(email) {
+    var reg_email = /[A-Za-z0-9\._%\+\-]+@[A-Za-z0-9\._%\+\-]+\.[A-Za-z]{2,4}/;
+    return email.match(reg_email);
+}
+function jamExists(jam) {
+    return jam.length > 0;
 }
 function existsPlaceholder() {
     return ("placeholder" in document.createElement("input"));
@@ -36,7 +38,7 @@ function getHTML(node) {
     return power('div', {'child':node}).innerHTML;
 }
 
-function getBookDetails(book_id){
+function getBookDetails(book_id) {
     // Book Name
     // Authors
     // Course Code
@@ -48,23 +50,23 @@ function getBookDetails(book_id){
     // Price Attitude (1 for negotiable, 0 for fixed)
     // College (3 letter code)
 
-    var dict ={};
-    var book_row = $('tr[data-book-id="'+ book_id +'"]');
-    var book_details_row = $('tr[data-details-book-id="' + book_id+ '"]');
+    var dict = {};
+    var book_row = $('tr[data-book-id="' + book_id + '"]');
+    var book_details_row = $('tr[data-details-book-id="' + book_id + '"]');
 
-    dict['book-name'] = book_details_row.find('.book-name').text();
+    dict['book_name'] = book_details_row.find('.book-name').text();
     dict['authors'] = book_details_row.find('.authors').text();
     dict['university'] = inverted_university_conversion[book_details_row.find('.university').text()];
     dict['description'] = book_details_row.find('.description').text();
     dict['edition'] = book_details_row.find('.edition').text();
 
-    dict['course-code'] = book_row.find('td:nth-child(2)').text();
+    dict['course_code'] = book_row.find('td:nth-child(2)').text();
 
     dict['price'] = getData('data-price', book_row);
-    dict['price-attitude'] = parseInt(getData('data-price-attitude', book_row));
-    dict['when'] = parseInt(getData('data-timestamp', book_row));
-    dict['book-status'] = parseInt(getData('data-book-status', book_row));
-    dict['num-replies'] = parseInt(getData('data-num-replies', book_row));
+    dict['price_attitude'] = parseInt(getData('data-price-attitude', book_row));
+    dict['timestamp'] = parseInt(getData('data-timestamp', book_row));
+    dict['book_status'] = parseInt(getData('data-book-status', book_row));
+    dict['num_replies'] = parseInt(getData('data-num-replies', book_row));
 
 
     return dict;
@@ -72,12 +74,20 @@ function getBookDetails(book_id){
 
 }
 
-function getData(data_attr, within){
-      if (within){
-          return $(within).find('[' + data_attr + ']').attr(data_attr);
-      } else{
-          return $('[' + data_attr + ']').attr(data_attr);
-      }
+function getData(data_attr, within) {
+    if (within) {
+        return $(within).find('[' + data_attr + ']').attr(data_attr);
+    } else {
+        return $('[' + data_attr + ']').attr(data_attr);
+    }
+}
+
+function setData(data_attr, new_val, within) {
+    if (within) {
+        $(within).find('[' + data_attr + ']').attr(data_attr,new_val);
+    } else {
+        $('[' + data_attr + ']').attr(data_attr,new_val);
+    }
 }
 
 function td(node) {
@@ -108,10 +118,12 @@ function only_numbers(e) {
     return ((typed_code >= 48 && typed_code <= 57) || (typed_code === 8) || (typed_code === 0) || (typed_code === 9));
 }
 
-function course_code_uppered(e) {
+function course_code_uppered() {
     setTimeout(function () {
-        var course_code = $('#p-course-code');
-        course_code.val(course_code.val().toUpperCase());
+        var post_course_code = $('#p-course-code');
+        var edit_course_code = $('#ed-course-code');
+        post_course_code.length > 0 && post_course_code.val(post_course_code.val().toUpperCase());
+        edit_course_code.length > 0 && edit_course_code.val(edit_course_code.val().toUpperCase());
     }, 1);
 }
 
@@ -128,7 +140,8 @@ $('#bu-form-post-book').click(function () {
 
 
     var edition = tr(td2p('Edition of Book (Optional)', power('input', {'type':'text', 'ID':'p-edition', 'maxlength':'10'})));
-    var course_code = tr(td2p('Course Code', power('input', {'type':'text', 'ID':'p-course-code', 'maxlength':'9', 'keypress':course_code_uppered})));
+    var course_code = tr(td2p('Course Code', power('input', {'type':'text', 'ID':'p-course-code', 'maxlength':'9',
+        'keypress':course_code_uppered, 'paste':function(){return false;}})));
 
     var university = power('select', { 'ID':'p-university'});
 
@@ -146,7 +159,7 @@ $('#bu-form-post-book').click(function () {
 
     var price_row = power('tr', {'ID':'price-row'});
 
-    var price = power('td', {'ID':'price-cell', 'Child':(power('input', {'type':'text', 'placeholder':'Price', 'ID':'p-price', 'maxlength':'4', 'keypress':only_numbers}))});
+    var price = power('td', {'ID':'price-cell', 'Child':(power('input', {'type':'text', 'placeholder':'Price', 'ID':'p-price', 'maxlength':'4', 'keypress':only_numbers, 'paste':function(){return false;}}))});
     if (!existsPlaceholder()) {
         $(price).prepend('Price');
     }
@@ -181,7 +194,7 @@ $('#bu-form-post-book').click(function () {
 
     frm_tbody.appendChild(email);
     if (loggedIn()) {
-        email.style.display = 'none';
+        $(email).val($('#cur-user-email').text()).hide();
     }
     //frm.appendChild(frm_table);
 
@@ -197,24 +210,24 @@ $('#bu-form-post-book').click(function () {
 
 function bu_post_book() {
     var data = {
-        'book-name':$('#p-book-name').val(),
+        'book_name':$('#p-book-name').val(),
         'authors':$('#p-authors').val(),
         'edition':$('#p-edition').val(),
-        'course-code':$('#p-course-code').val(),
+        'course_code':$('#p-course-code').val(),
         'price':parseInt($('#p-price').val()),
-        'price-attitude':($('#p-fixed:checked').length <= 0 ? 1 : 0),
+        'price_attitude':($('#p-fixed:checked').length <= 0 ? 1 : 0),
         'description':$('#p-description').val(),
         'university':$('#p-university').val(),
         'email':$('#p-email').val()
     };
-    if (data['book-name'].length < 1) {
+    if (data['book_name'].length < 1) {
         pop_up('Book Name not filled out.');
         return false;
     }
     else if (data['authors'].length < 1) {
         pop_up('Authors\' Names(s) not filled out.');
         return false;
-    } else if (data['course-code'].length < 1) {
+    } else if (data['course_code'].length < 1) {
         pop_up('Course Code not filled out.');
         return false;
 
@@ -226,20 +239,25 @@ function bu_post_book() {
         pop_up('Description not filled out.');
         return false;
     }
-
     else if (data['university'] === 'none') {
         pop_up('University not filled out.');
         return false;
-    } else if ((!loggedIn()) && (data['email'].length < 1)) {
-        pop_up('Email not filled out.');
-        return false;
+    } else if (!loggedIn()) {
+        if (data['email'].length < 1) {
+            pop_up('Email not filled out.');
+            return false;
+        }
+        if (!validEmail(data['email'])) {
+            pop_up('Invalid Email Address.');
+            return false;
+        }
     }
     if (true) {
-        data['book-id'] = '200';
-        data['is-member'] = false;
+        data['book_id'] = '200';
+        data['account_status'] = 1;
         perf_post_book(data);
     } else {
-        go_ajax('/book', 'POST', data, perf_post_book);
+        go_ajax('/_book', 'POST', data, perf_post_book);
     }
 
 
@@ -247,17 +265,17 @@ function bu_post_book() {
 
 
 function make_book_row(dict) {
-    var new_row = power('tr', {'data-book-id':dict['book-id']});
-    new_row.appendChild(power('td', dict['book-name']));
-    new_row.appendChild(power('td', dict['course-code']));
+    var new_row = power('tr', {'data-book-id':dict['book_id']});
+    new_row.appendChild(power('td', dict['book_name']));
+    new_row.appendChild(power('td', dict['course_code']));
     //var price_string = dict['price'].toString() + '$ (' +
     //    ((dict['price-attitude'] === 1) ? 'negotiable' : 'fixed')
     //    + ')';
-    new_row.appendChild(power('td', {'data-price-attitude':dict['price-attitude'],
-            'data-price': dict['price']}));
+    new_row.appendChild(power('td', {'data-price-attitude':dict['price_attitude'],
+        'data-price':dict['price']}));
 
-    new_row.appendChild(power('td', {'Text':time_diff(dict['when']),
-        'data-timestamp':dict['when'], 'data-time-diff':'1'}));
+    new_row.appendChild(power('td', {'Text':time_diff(dict['timestamp']),
+        'data-timestamp':dict['timestamp'], 'data-time-diff':'1'}));
 
     var status_cell = power('td');
     status_cell.appendChild(dict['availability'] === 1 ?
@@ -266,7 +284,7 @@ function make_book_row(dict) {
 
     status_cell.appendChild(document.createTextNode(' '));
     status_cell.appendChild(power('span',
-        {'data-num-replies':dict['replies'].toString()}
+        {'data-num-replies':dict['num_replies'].toString()}
     ));
 
     new_row.appendChild(status_cell);
@@ -290,11 +308,12 @@ function perf_post_book(dict) {
             (path.indexOf('mybooks') !== -1)) {
 
             dict['availability'] = 1;
-            dict['replies'] = 0;
-            dict['when'] = cur_utc();
+            dict['num_replies'] = 0;
+            dict['timestamp'] = cur_utc();
             var new_row = make_book_row(dict);
             add_animation(new_row, 'in-pop', 400);
-            var jam_first_row = $('#all-books').find('tr:first-child');
+            var jam_first_row = $('#all-books').find('th').last().parent();
+
             $("html, body").animate({ scrollTop:0 }, "100");
             jam_first_row.after(new_row);
         }
@@ -303,21 +322,26 @@ function perf_post_book(dict) {
         setTimeout(pop_out, 1500);
     } else {
         var please_verify = power('p');
-        please_verify.appendChild(power('span', {'html':"A verification email has been sent to the email address you mentioned: <b>" + dict['email'] + "</b>"}));
+        please_verify.appendChild(power('span', {'html':"<span class='green'>A book verification email has been sent to the email address you mentioned: <b>" + dict['email'] + "</b></span>"}));
         please_verify.appendChild(power('br'));
         please_verify.appendChild(power('span', "On clicking the verification link in the email sent, your book will be successfully posted."));
         please_verify.appendChild(power('br'));
         please_verify.appendChild(power('span', {'html':"Take note that this link only lasts for <b>2 hours</b>."}));
         please_verify.appendChild(power('br'));
-        if (!dict['is-member']) {
+        if (dict['account_status'] === -1) {
             please_verify.appendChild(power('div', {
                 'html':"<b>Read:</b> A password has been generated for you, this is included in the email sent to you. To reply to offers made to your book or to edit details entered, you will need to authenticate yourself with your email address alongwith the sent password."
+            }));
+        } else if (dict['account_status'] === 0) {
+            please_verify.appendChild(power('div', {
+                'html':"<b>Read:</b> You have created an account with that email, however you have not verified it. If you have posted a book/books with this email you can verify it by verifying the book you posted (through clicking the book verification link emailed to you). However if you created an account using the register page (<a href='torbok.com/register' class='normal-link'>torbok.com/register</a>) you will instead directly verify your account with an account verification email sent to you. "
             }));
         } else {
             please_verify.appendChild(power('div', {
                 'html':"<b>Read:</b> You already have an account on Torbok. You can confirm your posted book by" +
-                    " clicking the verification link emailed to you. However to skip this tedious step next time, you first login to the website and then post the book."
+                    " clicking the book verification link which was just emailed to you. However to skip this tedious step next time, you first login to the website and then post the book."
             }));
+
         }
         pop_up(please_verify);
     }
@@ -345,8 +369,8 @@ function bu_book_details() {
         ///window.history.pushState(null,null,'/book');
 
         if (true) {
-            perf_book_details({'book-id':book_id, 'book-name':$(this).find('td:first-child').html(), 'authors':'James Calprit', //'edition':'fourth',
-                'course-code':'PSY247H1', 'price':200, 'description':'The book is in relatively' +
+            perf_book_details({'book_id':book_id, 'book_name':$(this).find('td:first-child').html(), 'authors':'James Calprit', //'edition':'fourth',
+                'course_code':'PSY247H1', 'price':200, 'description':'The book is in relatively' +
                     ' good condition, I will also include test papers with it.', 'university':'stg',
                 'replies':[
                     ['Are you willing to sell only the first book? I can pay 45$ for it. Contact me at 416-775-9530.', 'jesse.winop@mail.utoronto.ca', 1367352069, 100],
@@ -356,7 +380,7 @@ function bu_book_details() {
                 ]
             });
         } else {
-            bring_json('/book/' + book_id, {'book-id':book_id}, perf_book_details);
+            bring_json('/_book/' + book_id, {}, perf_book_details);
         }
 
     }
@@ -371,55 +395,54 @@ function perf_book_details(dict) {
     if (dict['error'] !== undefined) {
         pop_up(dict['error']);
     }
-    var extra_details_row = power('tr', {'data-details-book-id':dict['book-id'], 'class':'details-row'});
+    var extra_details_row = power('tr', {'data-details-book-id':dict['book_id'], 'class':'details-row'});
 
     var extra_details_cell = power('td', {'colspan':'5'});
 
     extra_details_cell.appendChild(power('div', {'html':'<b>Book Name:</b> ' +
-        getHTML(power('span', {'text': dict['book-name'], 'class':'book-name'})),
+        getHTML(power('span', {'text':dict['book_name'], 'class':'book-name'})),
         'style':'white-space:normal:'}));
     extra_details_cell.appendChild(power('div', {'html':'<b>Authors:</b> ' +
-        getHTML(power('span', {'text': dict['authors'], 'class':'authors'}))
-        }));
+        getHTML(power('span', {'text':dict['authors'], 'class':'authors'}))
+    }));
     if ('edition' in dict) {
         extra_details_cell.appendChild(power('div', {'html':'<b>Edition:</b> ' +
-            getHTML(power('span', {'text': dict['edition'], 'class':'edition'}))
+            getHTML(power('span', {'text':dict['edition'], 'class':'edition'}))
         }));
     } else {
         // Just so that retrieving the edition when finding book details won't ever result in not found.
-        extra_details_cell.appendChild(power('div', {'html':getHTML(power('span', {'text': '', 'class':'edition', 'style':'display:hidden'}))
+        extra_details_cell.appendChild(power('div', {'html':getHTML(power('span', {'text':'', 'class':'edition', 'style':'display:hidden'}))
         }));
     }
     //extra_details_cell.appendChild(power('div', dict['price']));
     extra_details_cell.appendChild(power('div', {'html':'<b>University:</b> ' +
-        getHTML(power('span', {'text': university_conversion[dict['university']], 'class':'university'}))}));
+        getHTML(power('span', {'text':university_conversion[dict['university']], 'class':'university'}))}));
     extra_details_cell.appendChild(power('div', {'html':'<b>Description:</b> ' +
-            getHTML(power('span', {'text': dict['description'], 'class':'description'})),
-    'style':'white-space:normal:'}));
+        getHTML(power('span', {'text':dict['description'], 'class':'description'})),
+        'style':'white-space:normal;'}));
 
-    var book_link = 'torbok.com/book/' + dict['book-id'];
+    var book_link = 'torbok.com/book/' + dict['book_id'];
     extra_details_cell.appendChild(power('div', {'html':'<b>Link to Book:</b> ' +
-        getHTML(power('a', {'href':book_link, 'text':book_link, 'class':'normal-link'}))
+        getHTML(power('a', {'href':'http://' + book_link, 'text':book_link, 'class':'normal-link'}))
     }));
 
-    extra_details_cell.appendChild(power('button', {'class':'normal-link',
-        'text':'[ edit book details ]', 'id':'bu-form-edit-book',
-        'data-form-edit-book-id':dict['book-id'],
-        'click':buFormEditBook,
-        'data-book-owner':'1'
-    }));
-    extra_details_cell.appendChild(line_break);
-
+    if (dict['is_owner']) {
+        extra_details_cell.appendChild(power('button', {'class':'normal-link',
+            'text':'[ edit book details ]', 'id':'bu-form-edit-book',
+            'data-form-edit-book-id':dict['book_id'],
+            'click':buFormEditBook,
+            'data-book-owner':'1'
+        }));
+        extra_details_cell.appendChild(line_break);
+    }
     extra_details_row.appendChild(extra_details_cell);
-
-
 
 
     //var comments_row = power('tr', {'data-details-book-id':dict['book-id'], 'class':'details-row'});
     //var comments_cell = power('td', {'colspan':'5'});
     extra_details_cell.appendChild(power('p', {'style':'margin-top:10px', 'Text':'Replies to the Book Posting'}));
     var all_replies = dict['replies'];
-    var replies_list = power('ul', {'data-replies-book-id':dict['book-id']});
+    var replies_list = power('ul', {'data-replies-book-id':dict['book_id']});
     for (var i = 0; i < all_replies.length; i++) {
         bookReplyAppend(replies_list, all_replies[i]);
     }
@@ -429,7 +452,7 @@ function perf_book_details(dict) {
     var please_reply = power('div', {'class':'green', 'Text':'Messages left below are instantly emailed to the owner of the book.'});
     extra_details_cell.appendChild(please_reply);
     var reply_box = power('textarea', {'placeholder':'Message Content', 'rows':'1',
-        'data-reply-box-book-id':dict['book-id'], 'maxlength': '1000',
+        'data-reply-box-book-id':dict['book_id'], 'maxlength':'1000',
         'keypress':replyCheck});
     $.getScript("/static/js/jquery.autosize-min.js", function () {
         $(reply_box).autosize();
@@ -437,13 +460,13 @@ function perf_book_details(dict) {
     extra_details_cell.appendChild(reply_box);
 
     var submit_reply = power('button', {class:'nice-button', 'Text':'submit',
-        'data-submit-reply-book-id':dict['book-id'],
+        'data-submit-reply-book-id':dict['book_id'],
         'click':buReplyToOffer});
     extra_details_cell.appendChild(submit_reply);
 
     extra_details_row.appendChild(extra_details_cell);
 
-    var book_row = $('tr[data-book-id="' + dict['book-id'] + '"]');
+    var book_row = $('tr[data-book-id="' + dict['book_id'] + '"]');
     //add_animation(extra_details_cell,'in-pop', 500);
     //add_animation(comments_cell,'in-pop', 500);
 
@@ -456,9 +479,8 @@ function perf_book_details(dict) {
 }
 
 
-
-function buFormEditBook(){
-    if ( (!loggedIn()) || ($(this).attr('data-book-owner') !== '1')){
+function buFormEditBook() {
+    if ((!loggedIn()) || ($(this).attr('data-book-owner') !== '1')) {
         pop_up('You need to be logged in as the owner of the book in order to edit it.');
         return false;
     }
@@ -474,7 +496,7 @@ function buFormEditBook(){
 
     var header = power('h3', '~ Edit Book Details ~');
     var book_name = tr(td2p('Book Name', power('input', {'type':'text', 'ID':'ed-book-name', 'autocomplete':'off', 'maxlength':'170',
-    'value':book_details['book-name']}
+            'value':book_details['book_name']}
     )));
     var authors = tr(td2p('Authors\' Name(s)', power('input', {'type':'text', 'ID':'ed-authors', 'maxlength':'120',
         'value':book_details['authors']})));
@@ -482,16 +504,16 @@ function buFormEditBook(){
     var edition = tr(td2p('Edition of Book (Optional)', power('input', {'type':'text', 'ID':'ed-edition', 'maxlength':'10',
         'value':book_details['edition']})));
     var course_code = tr(td2p('Course Code', power('input', {'type':'text', 'ID':'ed-course-code', 'maxlength':'9', 'keypress':course_code_uppered,
-        'value':book_details['course-code']})));
+        'value':book_details['course_code'], 'paste':function(){return false;}})));
 
     var university = power('select', { 'ID':'ed-university'});
     university.appendChild(power('option', {'Text':'The University at which the book was used', 'value':'none', 'ID':'campus-placeholder'}));
 
     var selected_university = book_details['university'];
     for (var key in university_conversion) {
-        if (university_conversion.hasOwnProperty(key)){
+        if (university_conversion.hasOwnProperty(key)) {
             var opt = (power('option', {'Text':university_conversion[key], 'value':key}));
-            if (key === selected_university){
+            if (key === selected_university) {
                 opt.setAttribute('selected', 'selected');
             }
             university.appendChild(opt);
@@ -506,7 +528,8 @@ function buFormEditBook(){
 
     var price = power('td', {'ID':'price-cell', 'Child':(power('input', {'type':'text', 'placeholder':'Price', 'ID':'ed-price', 'maxlength':'4',
         'value':book_details['price'],
-        'keypress':only_numbers}))});
+        'keypress':only_numbers,
+        'paste':function(){return false;}}))});
     if (!existsPlaceholder()) {
         $(price).prepend('Price');
     }
@@ -517,9 +540,9 @@ function buFormEditBook(){
 
     var ed_fixed_radio = (power('input', {'type':'radio', 'name':'ed-price-attitude', 'ID':'ed-fixed'}));
     var ed_negotiable_radio = (power('input', {'type':'radio', 'name':'ed-price-attitude', 'ID':'ed-negotiable'}));
-    if (book_details['price-attitude'] === 0){
+    if (book_details['price_attitude'] === 0) {
         ed_fixed_radio.checked = 'checked';
-    } else{
+    } else {
         ed_negotiable_radio.checked = 'checked';
     }
 
@@ -541,9 +564,9 @@ function buFormEditBook(){
     book_status_cell.appendChild(power('span', 'Book Status\u00a0'));
     var ed_taken = (power('input', {'type':'radio', 'name':'ed-book-status', 'ID':'ed-taken'}));
     var ed_available = (power('input', {'type':'radio', 'name':'ed-book-status', 'ID':'ed-available'}));
-    if (book_details['book-status'] === 0){
+    if (book_details['book_status'] === 0) {
         ed_taken.checked = 'checked';
-    } else{
+    } else {
         ed_available.checked = 'checked';
     }
 
@@ -551,7 +574,7 @@ function buFormEditBook(){
     book_status_cell.appendChild(ed_taken);
     book_status_cell.appendChild(power('label', {'Text':'Taken', 'class':'red', 'for':'ed-taken'}));
     book_status_cell.appendChild(ed_available);
-    book_status_cell.appendChild(power('label', {'Text':'Available', class:'green','for':'ed-available'}));
+    book_status_cell.appendChild(power('label', {'Text':'Available', class:'green', 'for':'ed-available'}));
 
     book_status.appendChild(book_status_cell);
 
@@ -582,30 +605,30 @@ function buFormEditBook(){
     $('#ed-book-name').focus();
 }
 
-function buEditBook(){
+function buEditBook() {
 
     var book_id = $(this).attr('data-edit-book-id');
 
 
     var data = {
-        'book-name':$('#ed-book-name').val(),
+        'book_name':$('#ed-book-name').val(),
         'authors':$('#ed-authors').val(),
         'edition':$('#ed-edition').val(),
-        'course-code':$('#ed-course-code').val(),
+        'course_code':$('#ed-course-code').val(),
         'price':parseInt($('#ed-price').val()),
-        'price-attitude':($('#ed-fixed:checked').length <= 0 ? 1 : 0),
+        'price_attitude':($('#ed-fixed:checked').length <= 0 ? 1 : 0),
         'description':$('#ed-description').val(),
         'university':$('#ed-university').val(),
-        'book-status':($('#ed-taken:checked').length <= 0 ? 1 : 0)
+        'book_status':($('#ed-taken:checked').length <= 0 ? 1 : 0)
     };
-    if (data['book-name'].length < 1) {
+    if (data['book_name'].length < 1) {
         pop_up('Book Name not filled out.');
         return false;
     }
     else if (data['authors'].length < 1) {
         pop_up('Authors\' Names(s) not filled out.');
         return false;
-    } else if (data['course-code'].length < 1) {
+    } else if (data['course_code'].length < 1) {
         pop_up('Course Code not filled out.');
         return false;
 
@@ -625,12 +648,12 @@ function buEditBook(){
     if (true) {
         performEditBook({'error':'Sorry. Something went wrong while updating the details of the book.'});
     } else {
-        go_ajax('/book/' + book_id, 'UPDATE', data, performEditBook);
+        go_ajax('/_book/' + book_id, 'PATCH', data, performEditBook);
     }
 }
 
-function performEditBook(dict){
-    if (dict['error'] !== undefined){
+function performEditBook(dict) {
+    if (dict['error'] !== undefined) {
         pop_up(dict['error']);
         return false;
     }
@@ -664,7 +687,6 @@ function bookReplyAppend(list, reply_details) {
 }
 
 
-
 function buReplyToOffer() {
     var book_id = $(this).attr('data-submit-reply-book-id');
     var typed_value = this.previousSibling.value;
@@ -674,7 +696,10 @@ function buReplyToOffer() {
         } else {
             var login_link = '/login';
         }
-        pop_up(power('div', {'html':'<a href="' + login_link + '">Login</a> is required'}));
+        pop_up(power('div', {'html':
+            getHTML(power('a',{class:'normal-link', text:'login', href:login_link})) +
+                ' is required<br>' +
+        'account registrations done ' + getHTML(power('a',{class:'normal-link', text:'here', href:'/register'}))}));
         return false;
     }
     var email = $('#cur-user-email').html();
@@ -684,9 +709,9 @@ function buReplyToOffer() {
     }
     this.previousSibling.value = '';
     if (true) {
-        performReplyBook({'reply-details':[typed_value, email, cur_utc(), 800], 'book-id':book_id})
+        performReplyBook({'reply_details':[typed_value, email, cur_utc(), 800], 'book_id':book_id})
     } else {
-        go_ajax('/book/' + book_id + '/replies', 'POST', {'reply-content':typed_value}, performReplyBook);
+        go_ajax('/_book/' + book_id + '/replies', 'POST', {'reply_content':typed_value}, performReplyBook);
     }
 }
 
@@ -695,8 +720,11 @@ function performReplyBook(dict) {
         pop_up(dict['error']);
         return false;
     }
-    bookReplyAppend($('[data-replies-book-id="' + dict['book-id'] + '"]'),
-        dict['reply-details']);
+    var book_row = $('[data-book-id="' + dict['book_id']+'"]');
+    var num_replies = getData('data-num-replies', book_row);
+    setData('data-num-replies', parseInt(num_replies) +1,book_row);
+    bookReplyAppend($('[data-replies-book-id="' + dict['book_id'] + '"]'),
+        dict['reply_details']);
 }
 
 
@@ -708,7 +736,6 @@ function replyCheck(e) {
     }
     return true;
     //var num_line_breaks = (this.value).match(/\n/);
-    //alert(num_line_breaks);
 }
 
 
@@ -738,14 +765,18 @@ $('#register').submit(function () {
 
     var form_problems = $('#form-problems').empty();
     if (email.length < 1) {
-        form_problems.append(power('li', 'email not filled out'));
+        form_problems.append(power('li', 'Email not filled out'));
         return false;
     } else if (password.length < 1) {
-        form_problems.append(power('li', 'password not filled out'));
+        form_problems.append(power('li', 'Password not filled out'));
         return false;
     } else if (password.length < 7) {
-        form_problems.append(power('li', 'password must be at least 7 characters long'));
+        form_problems.append(power('li', 'Password must be at least 7 characters long'));
         return false;
+    } else if (!validEmail(email)) {
+        form_problems.append(power('li', 'Invalid email address'));
+        return false;
+
     }
 
     $(this).find('input[type="submit"]').prop('disabled', true);
@@ -758,13 +789,13 @@ $('#reset-password').submit(function () {
     var form_problems = $('#form-problems').empty();
 
     if ((new_password === '') || (confirm_new_password === '')) {
-        form_problems.append(power('li', 'both fields have to be filled out'));
+        form_problems.append(power('li', 'Both fields have to be filled out'));
         return false;
     } else if (new_password.length < 7) {
-        form_problems.append(power('li', 'password must be at least 7 characters long'));
+        form_problems.append(power('li', 'Password must be at least 7 characters long'));
         return false;
     } else if (new_password !== confirm_new_password) {
-        form_problems.append(power('li', 'passwords do not match'));
+        form_problems.append(power('li', 'Passwords do not match'));
         return false;
     }
 
@@ -816,8 +847,8 @@ function bu_change_password() {
     if (true) {
         perf_change_password({});
     } else {
-        go_ajax('/password', 'UPDATE', {'cur-password':cur_password,
-                'new-password':new_password, 'confirm-new-password':confirm_new_password},
+        go_ajax('/account/password', 'PATCH', {'cur_password':cur_password,
+                'new_password':new_password, 'confirm_new_password':confirm_new_password},
             perf_change_password);
     }
 }
@@ -878,18 +909,21 @@ $('#bu-email-password-reset').click(function () {
     if (email === '') {
         pop_up('Email hasn\'t been filled out');
         return false;
+    } if (!validEmail(email)){
+        pop_up('Invalid Email Address');
+        return false;
     }
     if (true) {
         performPasswordReset({});
     } else {
-        go_ajax('/email-password', 'POST', {'email':email}, performPasswordReset);
+        go_ajax('/email-password-reset', 'POST', {'email':email}, performPasswordReset);
     }
 
 });
 
 function performPasswordReset(dict) {
     if (dict['error'] !== undefined) {
-        alert(dict['error']);
+        pop_up(dict['error']);
         return false;
     }
     pop_up(power('div', {'class':'green', 'text':'An Email has been sent with a password reset link which lasts for exactly 2 hours. Use the link to reset the password to your account.'}),

@@ -12,14 +12,14 @@
         <img id="logo" src="../static/imgs/logo.png" onclick="location.href='/'"/>
 
         <p id="site-description">
-            Welcome to Torbok! Students at Universities in the Greater
-            Toronto Area sell books out here! If you have a book to sell
-            then post your book offering by clicking the 'Post Book' button below. If you've
-            come to buy books then use the search box to search for the book you want!
+            Welcome here! Torbok is a book trade network for students studying
+                  at universities in the Greater Toronto Area. If you have a book to sell
+                  then post your book offering by clicking the 'Post Book' button below. If you've
+                  come to buy books then use the search box to search for the book you want!
         </p>
 
         <form id="search-form" method="get" action="/search">
-            <input type="text" id="search-box" name="query" placeholder="Search Books" maxlength="150" autocomplete="off"/>
+            <input type="text" id="search-box" name="query" placeholder="Search Books" maxlength="100" autocomplete="off"/>
         </form>
         <ul id="search-suggestions"></ul>
         <button class="nice-button" id="bu-form-post-book">Post Book</button>
@@ -28,7 +28,8 @@
 
     <div id="auth">
         <h3 class="white-text">Register on Torbok</h3>
-        <form action="/account" id="register" method="post">
+        <form action="/register" id="register" method="post">
+            <!-- input type="hidden" id="account-verification-sent"/ -->
             <input type="text" name="email" placeholder="Email Address" maxlength="255"/>
             <input type="password" name="password" placeholder="Password" maxlength="100"/>
             <input type="submit" class="nice-button" value="Register on Torbok"/>
@@ -40,11 +41,30 @@
 
 </div>
 <script src="../static/js/jquery.js" defer></script>
-<script src="../static/js/powerhouse.js"></script>
+<script src="../static/js/powerhouse.js" defer></script>
 <script src="../static/js/time.js" defer></script>
 <script src="../static/js/popup.js" defer></script>
 <script src="../static/js/core.js" defer></script>
 <script src="../static/js/search.js" defer></script>
+<script defer>
+    window.onload = function(){
+        if (document.getElementById('account-verification-sent') !== null) {
+            pop_up(power('div',
+                    {class:'green',
+                    html: 'A verification link has been emailed to you.<br>' +
+                            '(Note that this link lasts for only 2 hours)'
+                    }), function(){
+                        window.location.href = '/';
+                    }
+            )
+        }
+    };
+</script>
+<script defer>
+    window.onload = function(){
+        $('[name="email"]').focus();
+    }
+</script>
 </body>
 
 </html>

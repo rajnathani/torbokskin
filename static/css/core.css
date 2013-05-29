@@ -1,5 +1,21 @@
 /**animations**/
 
+
+
+@-webkit-keyframes trans {
+    0% {background-image:url('../imgs/innis-college.jpg');}
+    33% {background-image:url('../imgs/robarts.jpg');}
+    66%  {background-image:url('../imgs/toronto-downtown-busy-roads.png');}
+    100% {background-image:url('../imgs/toronto-highrises.jpg');}
+}
+
+@keyframes trans {
+    0% {background-image:url('../imgs/innis-college.jpg');}
+    33% {background-image:url('../imgs/robarts.jpg');}
+    66%  {background-image:url('../imgs/toronto-downtown-busy-roads.png');}
+    100% {background-image:url('../imgs/toronto-highrises.jpg');}
+}
+
 @-webkit-keyframes in-backy {
     from {
         background: rgba(0, 0, 0, 0)
@@ -132,7 +148,7 @@
     padding: 20px;
     -webkit-animation: in-pop 170ms;
     animation: in-pop 170ms;
-    box-shadow:0 0 8px 3px skyblue;
+    box-shadow:0 0 10px 3px rgb(35, 156, 235);
 }
 
 
@@ -201,8 +217,9 @@
     font-family:verdana, sans-serif;
     border: 0;
     text-align: left;
-
 }
+
+
 
 table {
     border-collapse: collapse;
@@ -254,11 +271,13 @@ body, html {
 
 body {
     background-color: rgb(240,240,240);
-    min-width: 400px;
+    min-width: 600px;
     overflow: auto;
-    background:-webkit-repeating-radial-gradient(top left, circle, white, blue 10%, white 20%) fixed;
+    /*background:-webkit-repeating-radial-gradient(top left, circle, white, blue 10%, white 20%) fixed;*/
     background:url('../imgs/innis-college.jpg') fixed;
-    background-size: cover;
+    background-size: 100% auto;
+    /*-webkit-animation:trans 60000ms infinite alternate;
+    animation:trans 60000ms infinite alternate*/
 }
 
 body, textarea, input, select, a {
@@ -589,17 +608,21 @@ table#all-books tr{
     width:210px;
 }
 
-#all-books tr th:nth-child(2){
-    width:85px;
+#all-books tr th:nth-child(2), #all-books tr td:nth-child(2){
+
+    width: 85px;
 }
-#all-books tr th:nth-child(3){
+#all-books tr th:nth-child(3), #all-books tr td:nth-child(3){
     width:130px;
 }
 
-#all-books tr th:nth-child(4){
+#all-books tr th:nth-child(4), #all-books tr th:nth-child(4){
     width:110px;
 }
 
+#all-books tr th:nth-child(5), #all-books tr th:nth-child(5){
+    width:150px;
+}
 
 #all-books td, #all-books th{
     padding:10px 5px;
@@ -638,14 +661,19 @@ table#all-books tr{
 }
 
 #all-books td span[data-num-replies]:after {
-    content: '(' attr(data-num-replies) ' Replies)';
+    content: ' (' attr(data-num-replies) ' Replies)';
 }
 
 #all-books td span[data-num-replies="0"]:after {
-    content: '(No Replies)'
+    content: ' (No Replies)'
 }
+
+#all-books td span[data-num-replies="0"]:after {
+    content: ' (0 Replies)'
+}
+
 #all-books td span[data-num-replies="1"]:after {
-    content: '(1 Reply)'
+    content: ' (1 Reply)'
 }
 
 
@@ -656,11 +684,11 @@ table#all-books tr{
 }
 
 #all-books tr.details-hidden{
-    background-color: #fff0b4 !important;
+    background-color: #fff5be !important;
 }
 
 #all-books tr.details-hidden:hover{
-    background-color: #fff7be !important;
+    background-color: #fffcc3 !important;
 }
 
 #all-books tr.details-row {
@@ -847,7 +875,6 @@ float: right;
     /**table#all-books td:not(:first-child){
         max-width: 100px;
     }  **/
-
-
-
 }
+
+

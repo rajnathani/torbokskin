@@ -153,7 +153,7 @@ function make_keywords(query){
             refined_keywords.push(raw_keywords[i]);
         }
     }
-    if (exclude_last_word == 1){
+    if (exclude_last_word === 1){
         return {'other-keywords': refined_keywords, 'last-keyword':raw_keywords.pop()};
     } else{
         return {'other-keywords': refined_keywords, 'last-keyword':''};

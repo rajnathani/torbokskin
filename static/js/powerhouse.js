@@ -52,7 +52,9 @@ function power(tag, element_build_dict) {
                 case 'mousedown':
                     created_node.onmousedown = value;
                     break;
-
+                case 'paste':
+                    created_node.onpaste = value;
+                    break;
                 case 'submit':
                     created_node.onsubmit = value;
                     break;
@@ -86,13 +88,17 @@ function remove_animation(node){
     return node;
 }
 
+
+function is_there(node){
+    return node !== undefined;
+}
 function go_ajax(url, method, data, success_func){
     if (!is_there(success_func)){
         success_func = function(){location.reload();}
     }
 
     $.ajax({
-        url:$SCRIPT_ROOT + url,
+        url: url,
         type:method,
         data:  JSON.stringify(data),
         contentType:"application/json;charset=UTF-8",
@@ -102,7 +108,7 @@ function go_ajax(url, method, data, success_func){
 }
 
 function bring_json(url, data, func){
-    $.getJSON($SCRIPT_ROOT + url, data, func);
+    $.getJSON( url, data, func);
 }
 
 
