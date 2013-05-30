@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <title>Torbok - Toronto Universities Book Trade</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/core.css"/>
+</head>
+<body>
+<div id="content" class="cf">
+    <div id="control-panel">
+        <img id="logo" src="../static/imgs/logo.png" onclick="location.href='/'"/>
+        <p id="site-description">
+            Welcome here! Torbok is a book trade network for students studying
+                  at universities in the Greater Toronto Area. If you have a book to sell
+                  then post your book offering by clicking the 'Post Book' button below. If you've
+                  come to buy books then use the search box to search for the book you want!
+        </p>
+
+        <form id="search-form" method="get" action="/search">
+            <input type="text" id="search-box" name="query" placeholder="Search Books" maxlength="100" autocomplete="off"/>
+        </form>
+        <ul id="search-suggestions"></ul>
+        <button class="nice-button" id="bu-form-post-book">Post Book</button>
+        <a class="nice-button green-nice-button" href="mybooks.html" id="my-books">My Posted Books</a>
+
+        <p id="logged-in">
+            You are Signed In as <span id="cur-user-email">matt.jacks@mail.utoronto.ca</span><br>
+            <a href="/logout" class="normal-link light-link">[ Sign Out ]</a>
+            <a href="/edit-account.html" class="normal-link light-link">[ Edit Account ]</a>
+
+        </p>
+    </div>
+
+    <table id="all-books">
+        <colgroup>
+            <col width="175px" style="width:175px;"/>
+            <col width="63px" style="width:63px;"/>
+            <col width="100px" style="width:100px;"/>
+            <col width="80px" style="width:80px;"/>
+            <col width="100px" style="width:100px;"/>
+        </colgroup>
+        <tr data-book-id="100">
+            <td>Introduction to Economics</td>
+            <td>ECO100Y1</td>
+            <td data-price="100" data-price-attitude="1"></td>
+            <td data-timestamp="1367394069" data-time-diff="1"></td>
+            <td><span class="green" data-book-status="1"></span><span data-num-replies="2"></span></td>
+        </tr>
+
+
+
+    </table>
+
+</div>
+<script src="../static/js/jquery.js" defer></script>
+<script src="../static/js/powerhouse.js" defer></script>
+<script src="../static/js/time.js" defer></script>
+<script src="../static/js/popup.js" defer></script>
+<script src="../static/js/core.js" defer></script>
+<script src="../static/js/search.js" defer></script>
+<script defer>
+    window.onload = function(){
+        $("tr[data-book-id]").click();
+    }
+</script>
+</body>
+
+</html>
