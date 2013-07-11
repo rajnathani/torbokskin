@@ -21,6 +21,32 @@ var line_break = power('br');
 setInterval(time_engineer, 2000);
 
 
+$('#notify-me-info').click(function () {
+    var div_pop = power('div');
+    var details = power('p', {html:"Notify Me is a simple service to help you get instantly notified when the " +
+        "books you want to buy are posted by someone on torbok.<br><br>All you do is provide a set of keywords like " +
+        "'ECO227', 'Calculus', 'Java'. The millisecond someone posts a book which matches your spider web of " +
+        "keywords, the server will shoot you an email informing you about it!<br><br>This is how it looks:"         });
+    div_pop.appendChild(details);
+
+    var eg_keywords = ['MAT357', 'introduction to algorithms', 'organic chemistry', 'writing essays', 'APS'];
+    for (var i=0; i < eg_keywords.length; i++){
+        div_pop.appendChild(power('input', {type:"text",readonly:"", value:eg_keywords[i]}));
+    }
+
+    div_pop.appendChild(power('p', {html:'<br>To register your keywords ' +
+        power('a', {href:'/notify-me', text:"click here.", class:"normal-link"}).outerHTML}));
+
+    pop_up(div_pop);
+
+
+
+
+
+
+});
+
+
 function validEmail(email) {
     var reg_email = /[A-Za-z0-9\._%\+\-]+@[A-Za-z0-9\._%\+\-]+\.[A-Za-z]{2,4}/;
     return email.match(reg_email);
@@ -70,9 +96,8 @@ function getBookDetails(book_id) {
 
 
     return dict;
-
-
 }
+
 
 function getData(data_attr, within) {
     if (within) {
@@ -84,9 +109,9 @@ function getData(data_attr, within) {
 
 function setData(data_attr, new_val, within) {
     if (within) {
-        $(within).find('[' + data_attr + ']').attr(data_attr,new_val);
+        $(within).find('[' + data_attr + ']').attr(data_attr, new_val);
     } else {
-        $('[' + data_attr + ']').attr(data_attr,new_val);
+        $('[' + data_attr + ']').attr(data_attr, new_val);
     }
 }
 
@@ -141,7 +166,9 @@ $('#bu-form-post-book').click(function () {
 
     var edition = tr(td2p('Edition of Book (Optional)', power('input', {'type':'text', 'ID':'p-edition', 'maxlength':'10'})));
     var course_code = tr(td2p('Course Code', power('input', {'type':'text', 'ID':'p-course-code', 'maxlength':'9',
-        'keypress':course_code_uppered, 'paste':function(){return false;}})));
+        'keypress':course_code_uppered, 'paste':function () {
+            return false;
+        }})));
 
     var university = power('select', { 'ID':'p-university'});
 
@@ -159,7 +186,9 @@ $('#bu-form-post-book').click(function () {
 
     var price_row = power('tr', {'ID':'price-row'});
 
-    var price = power('td', {'ID':'price-cell', 'Child':(power('input', {'type':'text', 'placeholder':'Price', 'ID':'p-price', 'maxlength':'4', 'keypress':only_numbers, 'paste':function(){return false;}}))});
+    var price = power('td', {'ID':'price-cell', 'Child':(power('input', {'type':'text', 'placeholder':'Price', 'ID':'p-price', 'maxlength':'4', 'keypress':only_numbers, 'paste':function () {
+        return false;
+    }}))});
     if (!existsPlaceholder()) {
         $(price).prepend('Price');
     }
@@ -504,7 +533,9 @@ function buFormEditBook() {
     var edition = tr(td2p('Edition of Book (Optional)', power('input', {'type':'text', 'ID':'ed-edition', 'maxlength':'10',
         'value':book_details['edition']})));
     var course_code = tr(td2p('Course Code', power('input', {'type':'text', 'ID':'ed-course-code', 'maxlength':'9', 'keypress':course_code_uppered,
-        'value':book_details['course_code'], 'paste':function(){return false;}})));
+        'value':book_details['course_code'], 'paste':function () {
+            return false;
+        }})));
 
     var university = power('select', { 'ID':'ed-university'});
     university.appendChild(power('option', {'Text':'The University at which the book was used', 'value':'none', 'ID':'campus-placeholder'}));
@@ -529,7 +560,9 @@ function buFormEditBook() {
     var price = power('td', {'ID':'price-cell', 'Child':(power('input', {'type':'text', 'placeholder':'Price', 'ID':'ed-price', 'maxlength':'4',
         'value':book_details['price'],
         'keypress':only_numbers,
-        'paste':function(){return false;}}))});
+        'paste':function () {
+            return false;
+        }}))});
     if (!existsPlaceholder()) {
         $(price).prepend('Price');
     }
@@ -696,10 +729,9 @@ function buReplyToOffer() {
         } else {
             var login_link = '/login';
         }
-        pop_up(power('div', {'html':
-            getHTML(power('a',{class:'normal-link', text:'login', href:login_link})) +
-                ' is required<br>' +
-        'account registrations done ' + getHTML(power('a',{class:'normal-link', text:'here', href:'/register'}))}));
+        pop_up(power('div', {'html':getHTML(power('a', {class:'normal-link', text:'login', href:login_link})) +
+            ' is required<br>' +
+            'account registrations done ' + getHTML(power('a', {class:'normal-link', text:'here', href:'/register'}))}));
         return false;
     }
     var email = $('#cur-user-email').html();
@@ -720,9 +752,9 @@ function performReplyBook(dict) {
         pop_up(dict['error']);
         return false;
     }
-    var book_row = $('[data-book-id="' + dict['book_id']+'"]');
+    var book_row = $('[data-book-id="' + dict['book_id'] + '"]');
     var num_replies = getData('data-num-replies', book_row);
-    setData('data-num-replies', parseInt(num_replies) +1,book_row);
+    setData('data-num-replies', parseInt(num_replies) + 1, book_row);
     bookReplyAppend($('[data-replies-book-id="' + dict['book_id'] + '"]'),
         dict['reply_details']);
 }
@@ -737,6 +769,9 @@ function replyCheck(e) {
     return true;
     //var num_line_breaks = (this.value).match(/\n/);
 }
+
+
+
 
 
 ////////////////////////////////////////LOGIN//////////////////////////////////////
@@ -909,7 +944,8 @@ $('#bu-email-password-reset').click(function () {
     if (email === '') {
         pop_up('Email hasn\'t been filled out');
         return false;
-    } if (!validEmail(email)){
+    }
+    if (!validEmail(email)) {
         pop_up('Invalid Email Address');
         return false;
     }
@@ -931,4 +967,34 @@ function performPasswordReset(dict) {
             window.location.href = '/'
         });
 
+}
+
+
+////////////////////////////////NOTIFY ME///////////////////////////////////////////
+
+$('#bu-save-notify-me').click(function(){
+    var all_entries = {};
+    var user_entry_val;
+    for (var i= 1; i< 9; i++){
+        user_entry_val =$('#entry-' + i).val();
+        if (user_entry_val.length !== 0 && user_entry_val.length < 3) {
+            pop_up("Entries must have atleast 3 characters if not left blank!" );
+            return false;
+        }
+        all_entries[i.toString()] = user_entry_val;
+    }
+    if (true){
+        performSaveNotifyMe({num_entries:3});
+    } else {
+        go_ajax('/notify-me', 'PATCH',all_entries, performSaveNotifyMe);
+    }
+});
+
+function performSaveNotifyMe(dict){
+
+    if (dict.error){
+         pop_up(dict.error);
+    } else {
+        pop_up(power('span', {'class':'green', text:"Your " + dict.num_entries +" entries have been successfully saved!"}));
+    }
 }

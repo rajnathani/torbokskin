@@ -141,6 +141,23 @@
     to{-webkit-transform:none;}
 }
 
+@keyframes flash{
+    from{color: #8cd5f2
+    }
+    to{color: #c2f3ff;
+    }
+}
+
+
+@-webkit-keyframes flash{
+    from{color: #8cd5f2
+    }
+    to{color: #c2f3ff;
+    }
+}
+
+
+
 .popup-popup {
     border: 2px solid #afafaf;
     background-color: #f0f0f0;
@@ -494,6 +511,11 @@ input[type="submit"].basic-button:active, button.basic-button:active {
     color:#dcdcdc;
 }
 
+#notify-me-info {
+    -webkit-animation:flash 850ms infinite alternate;
+    animation:flash 850ms infinite alternate;
+}
+
 #logged-in{
     margin-top: 14px;
     line-height: 130%;
@@ -829,16 +851,21 @@ float: right;
 }
 
 
-#bu-form-change-password, #bu-delete-account{
-         margin: auto;
+#bu-form-change-password, #bu-delete-account,#big-button-notify-me {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin: auto;
     margin-bottom: 4px;
-    isplay: table-cell;
+    display: block;
         width:95%;
-    height:100px;
-    vertical-align: middle;
+    padding:30px 0;
+
 }
 
-
+#notify-me-form{
+    margin: auto;
+    max-width: 400px;
+}
 
 
 

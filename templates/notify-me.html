@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="utf-8"/>
+
+    <title>Torbok - Toronto Universities Book Trade</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/core.css"/>
+</head>
+<body>
+<div id="content" class="cf">
+    <div id="control-panel">
+        <img id="logo" src="../static/imgs/logo.png" onclick="location.href='/'"/>
+
+        <p id="site-description">
+            Welcome here! Torbok is a book trade network for students studying
+            at universities in the Greater Toronto Area. If you have a book to sell
+            then post your book offering by clicking the 'Post Book' button below. If you've
+            come to buy books then use the search box to search for the book you want or
+            use the
+            <button id="notify-me-info" class="normal-link light-link">'Notify Me'</button>
+            to instantly get notified
+            when a book is posted matching a set of keywords which you define.
+        </p>
+
+        <form id="search-form" method="get" action="/search">
+            <input type="text" id="search-box" name="query" placeholder="Search Books" maxlength="100"
+                   autocomplete="off"/>
+        </form>
+        <ul id="search-suggestions"></ul>
+        <button class="nice-button" id="bu-form-post-book">Post Book</button>
+        <a class="nice-button green-nice-button" href="mybooks.html" id="my-books">My Posted Books</a>
+    </div>
+
+    <div id="auth" style="padding-top: 20px">
+
+        <div id="notify-me-form">
+            <h3 class="white-text">Notify Me</h3>
+
+            <p class="white-text">Notify Me is a simple service to help you get instantly notified when the
+                books you want to buy are posted by someone on torbok.<br><br>All you do is provide a set of keywords
+                like
+                'ECO227', 'Calculus', 'Java'. The millisecond someone posts a book which matches your spider web of
+                keywords, the server will shoot you an email informing you about it!<br><br>Each entry can
+                contain 3 to 50 characters. You get 8 entries in total. The order doesn't matter, and the examples
+                given below are not bound to any of the entries. If you require less than 8 entries
+                then leave the remaining blank:</p><br>
+            <input type="text" id="entry-1" placeholder="Eg: MAT357" maxlength="50"/>
+            <input type="text" id="entry-2" placeholder="Eg: introduction to algorithms" maxlength="50"/>
+            <input type="text" id="entry-3" placeholder="Eg: organic chemistry" maxlength="50"/>
+            <input type="text" id="entry-4" placeholder="Eg: java" maxlength="50"/>
+            <input type="text" id="entry-5" placeholder="Eg: writing essays" maxlength="50"/>
+            <input type="text" id="entry-6" placeholder="Eg: APS" maxlength="50"/>
+            <input type="text" id="entry-7" placeholder="Eg: RSM2 (grabs all second year RSM courses)" maxlength="50"/>
+            <input type="text" id="entry-8" placeholder="Eg: Macroeconomics" maxlength="50"/>
+
+
+            <input type="submit" class="nice-button" id="bu-save-notify-me" value="Save!"/>
+            <br><br>
+
+
+        </div>
+    </div>
+
+</div>
+<script src="../static/js/jquery.js" defer></script>
+<script src="../static/js/powerhouse.js" defer></script>
+<script src="../static/js/time.js" defer></script>
+<script src="../static/js/popup.js" defer></script>
+<script src="../static/js/core.js" defer></script>
+<script src="../static/js/search.js" defer></script>
+</body>
+
+</html>
