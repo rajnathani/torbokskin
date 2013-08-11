@@ -34,6 +34,12 @@ function power(tag, element_build_dict) {
                 case 'click':
                     created_node.onclick = value;
                     break;
+                case 'focus':
+                    created_node.onfocus = value;
+                    break;
+                case 'blur':
+                    created_node.onblur = value;
+                    break;
                 case 'keydown':
                     created_node.onkeydown = value;
                     break;
