@@ -482,7 +482,7 @@ function perf_book_details(dict) {
     extra_details_cell.appendChild(please_reply);
     var reply_box = power('textarea', {'placeholder':'Message Content', 'rows':'1',
         'data-reply-box-book-id':dict['book_id'], 'maxlength':'1000',
-        focus:function(){this.setAttribute('placeholder', 'Message Content (press enter to reply)')},
+        focus:function(){this.setAttribute('placeholder', 'Message Content (Press Enter to Send)')},
         blur:function(){this.setAttribute('placeholder', 'Message Content')},
         'keypress':replyCheck});
     $.getScript("/static/js/jquery.autosize-min.js", function () {
