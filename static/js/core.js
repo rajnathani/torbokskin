@@ -39,11 +39,6 @@ $('#notify-me-info').click(function () {
 
     pop_up(div_pop);
 
-
-
-
-
-
 });
 
 
@@ -307,7 +302,7 @@ function make_book_row(dict) {
         'data-timestamp':dict['timestamp'], 'data-time-diff':'1'}));
 
     var status_cell = power('td');
-    status_cell.appendChild(dict['availability'] === 1 ?
+    status_cell.appendChild(dict['book_status'] === 1 ?
         power('span', {'data-book-status':'1', 'class':'green'}) :
         power('span', {'data-book-status':'0', 'class':'red'}));
 
@@ -318,6 +313,7 @@ function make_book_row(dict) {
 
     new_row.appendChild(status_cell);
     new_row.onclick = bu_book_details;
+
     return new_row;
 }
 
@@ -333,10 +329,10 @@ function perf_post_book(dict) {
     pop_out();
     if (loggedIn()) {
         var path = window.location.pathname;
-        if (path === '/' || path === '/Users/raj/earth/torbok/torbokskin/templates/home.html' ||
+        if (path === '/' || path === '/Users/relfor/earth/torbok/torbokskin/templates/home.html' ||
             (path.indexOf('mybooks') !== -1)) {
 
-            dict['availability'] = 1;
+            dict['book_status'] = 1;
             dict['num_replies'] = 0;
             dict['timestamp'] = cur_utc();
             var new_row = make_book_row(dict);

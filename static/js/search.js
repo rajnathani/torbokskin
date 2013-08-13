@@ -1,5 +1,3 @@
-
-
 var jam_search_query = $("#search-box");
 var jam_search_suggestions = $('#search-suggestions');
 var jam_cur_spotlight;
@@ -7,13 +5,14 @@ var previous_search = "";
 var search_cache = {};
 
 
-function remove_px(s){
+function remove_px(s) {
     var start_px = s.indexOf('px');
-    if (start_px !== -1){
+    if (start_px !== -1) {
         return parseInt(s.substr(0, start_px));
     }
 }
-jam_search_suggestions.css('width',(jam_search_query.width() +
+
+jam_search_suggestions.css('width', (jam_search_query.width() +
     remove_px(jam_search_query.css('paddingLeft')) + remove_px(jam_search_query.css('paddingRight'))) +
     remove_px(jam_search_query.css('borderLeftWidth')) +
     remove_px(jam_search_query.css('borderRightWidth'))
@@ -29,7 +28,8 @@ $('#search-form').submit(function () {
             this['query'].value = spotlight_link;
             return true;
         }
-    } return false;
+    }
+    return false;
 
 });
 
@@ -53,9 +53,9 @@ jam_search_query.keyup(function (event) {
         }
         previous_search = search_query;
     }
-    if(jam_search_suggestions.children().length === 0){
+    if (jam_search_suggestions.children().length === 0) {
         jam_search_suggestions.hide();
-    } else{
+    } else {
         jam_search_suggestions.show();
     }
 });
@@ -121,57 +121,35 @@ function suggestionsDownKey() {
     }
 }
 
+var getting_suggestions = false;
 function search_suggest(search_query) {
-    search_query = search_query.toLowerCase();
-    if (true){
-        var made_keywords = make_keywords(search_query);
-        perf_search_suggest({'suggestions':['How to Win']});
-        perf_search_suggest({'suggestions':['Late Withdrawals']})
-    } else{
-        bring_json('/_search', make_keywords(search_query), perf_search_suggest)
-    }
-}
-
-function make_keywords(query){
-    //console.log('before: ' + query);
-    query = query.replace(/[\W]/g, ' ');
-    //console.log('middle: ' + query);
-    query = query.replace(/\s+/g, ' ');
-    //console.log('after: ' + query);
-    var raw_keywords = query.split(' ');
-    var refined_keywords = [];
-
-    var exclude_last_word = 1;
-
-    if (query[query.length-1] === " "){
-        exclude_last_word = 0;
-    }
-
-    for (var i =0; i < raw_keywords.length -exclude_last_word; i++){
-        if ((raw_keywords[i].length > 1 )
-            && (refined_keywords.indexOf(raw_keywords[i]) === -1)) {
-            refined_keywords.push(raw_keywords[i]);
+    if (!getting_suggestions) {
+        if (true) {
+            perf_search_suggest({'suggestions': ['How to Win']});
+            perf_search_suggest({'suggestions': ['Late Withdrawals']})
+        } else {
+            getting_suggestions = true;
+            new_go_ajax('/_search?query=' + encodeURIComponent(search_query).toUpperCase(), 'GET',  perf_search_suggest, {contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                complete: function () {
+                getting_suggestions = false;
+            }})
         }
     }
-    if (exclude_last_word === 1){
-        return {'other-keywords': refined_keywords, 'last-keyword':raw_keywords.pop()};
-    } else{
-        return {'other-keywords': refined_keywords, 'last-keyword':''};
-    }
 }
 
-function perf_search_suggest(results_dict){
+
+function perf_search_suggest(results_dict) {
     var suggestions = results_dict['suggestions'];
-    if (suggestions.length != 0){
+    if (suggestions.length != 0) {
         display_search_suggestions();
-        for (var i=0; i < suggestions.length; i++){
+        for (var i = 0; i < suggestions.length; i++) {
             add_suggestion(suggestions[i]);
         }
     }
 }
 
 
-function display_search_suggestions(){
+function display_search_suggestions() {
     var creator_offset = jam_search_query.offset();
     //jam_search_suggestions.css('left', creator_offset.left + "px");
     jam_search_suggestions.css('top', (creator_offset.top - $(document).scrollTop() + 33) + "px");
@@ -179,10 +157,11 @@ function display_search_suggestions(){
 }
 
 function add_suggestion(link) {
-    jam_search_suggestions.append(power('li', {'html': bolden_keywords(decodeURI(link)),
-            'mouseover':spotlight_suggestion, 'mouseout':unspotlight_suggestion, 'data-link': link ,
-            'mousedown':function () {
-                window.location.href = $(this).attr('data-link')
+    //$(this).attr('data-link');
+    jam_search_suggestions.append(power('li', {'html': decodeURI(link),
+            'mouseover': spotlight_suggestion, 'mouseout': unspotlight_suggestion, 'data-link': link,
+            'mousedown': function () {
+                window.location.href = '/search?query=' + encodeURIComponent($(this).attr('data-link'))
             } }
     ));
 }
@@ -195,18 +174,3 @@ function unspotlight_suggestion() {
     $(this).attr('id', '');
 }
 
-function bolden_keywords(content) {
-    var search_query = jam_search_query.val().toLowerCase();
-    var split_content = content.split(' ');
-    var boldened_content = "";
-    for (var i = 0; i < split_content.length; i++) {
-        if (search_query.indexOf(split_content[i].toLowerCase()) !== -1) {
-            boldened_content += '<b>' + split_content[i] + '</b>';
-        } else {
-            boldened_content += split_content[i];
-        }
-        boldened_content += " ";
-    }
-
-    return boldened_content;
-}

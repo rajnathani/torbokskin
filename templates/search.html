@@ -40,7 +40,7 @@
             <col width="80px" style="width:80px;"/>
             <col width="100px" style="width:100px;"/>
         </colgroup>
-        <tr><th colspan="5">Search Results for '<span id="display-search-query">pineapples</span>' (4 found)</th></tr>
+        <tr><th colspan="5">Search Results for '<span id="display-search-query">pineapples & toffees</span>' (4 found)</th></tr>
 
         <tr>
             <th>Book Name</th>
@@ -91,8 +91,9 @@
 <script defer>
     window.onload = function(){
         var search_box = document.getElementById('search-box');
-        search_box.value = document.getElementById('display-search-query').innerHTML;
+        search_box.value = document.getElementById('display-search-query').innerText;
         search_box.focus();
+        $('#search-suggestions').empty();
     }
 </script>
 </body>

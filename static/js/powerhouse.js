@@ -113,6 +113,34 @@ function go_ajax(url, method, data, success_func){
     });
 }
 
+
+function new_go_ajax(url, method, data, success_func, extra_dict) {
+    if ($.type(data) === "function") {
+        var success_func_holder = success_func;
+        success_func = data;
+        extra_dict = success_func_holder;
+        data = undefined;
+    }
+    if (!extra_dict){
+        extra_dict = {};
+    }
+
+    $.ajax({
+        url: url,
+        type: method,
+        data: data ? JSON.stringify(data) : null,
+        contentType: extra_dict.contentType ? extra_dict.contentType :"application/json;charset=UTF-8",
+
+        dataType:extra_dict.dataType,
+
+        success: success_func,
+        complete: extra_dict.complete,
+        context: extra_dict.context
+
+    });
+}
+
+
 function bring_json(url, data, func){
     $.getJSON( url, data, func);
 }
