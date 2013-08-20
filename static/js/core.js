@@ -426,7 +426,7 @@ function perf_book_details(dict) {
 
     extra_details_cell.appendChild(power('div', {'html':'<b>Book Name:</b> ' +
         getHTML(power('span', {'text':dict['book_name'], 'class':'book-name'})),
-        'style':'white-space:normal:'}));
+        'style':'white-space:normal'}));
     extra_details_cell.appendChild(power('div', {'html':'<b>Authors:</b> ' +
         getHTML(power('span', {'text':dict['authors'], 'class':'authors'}))
     }));

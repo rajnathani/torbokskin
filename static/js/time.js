@@ -98,37 +98,37 @@ function time_diff(timestamp) {
         base_string =  seconds_diff + ' seconds';
     }
     else if (seconds_diff < 40) {
-        base_string = 'about 30 seconds';
+        base_string = 'About 30 seconds';
     } else if (seconds_diff < 60) {
-        base_string = 'less than a minute';
+        base_string = 'Less than a minute';
     }
     else if (minutes_diff < 2) {
-        base_string = 'one minute';
+        base_string = 'One minute';
 
     } else if (minutes_diff <= 60) {
         base_string =  minutes_diff + ' minutes';
 
     } else if (hours_diff <= 2) {
-        base_string =  'one hour';
+        base_string =  'One hour';
     } else if (hours_diff < 24) {
         base_string =  hours_diff + ' hours';
     }
     else if (days_diff < 2) {
         needs_suffix = false;
-        base_string = future ? 'tomorrow' : 'yesterday';
+        base_string = future ? 'Tomorrow' : 'Yesterday';
     }
     else if (weeks_diff < 1) {
         base_string = days_diff + ' days';
     }
     else if (weeks_diff < 2) {
-        base_string = 'one week';
+        base_string = 'One week';
     }
 
     else if (months_diff < 1) {
         base_string = (Math.floor(days_diff / (7)) + ' weeks');
     }
     else if (months_diff < 2) {
-        base_string =  'a month';
+        base_string =  'A month';
     } else if (year_diff < 1) {
         base_string =  months_diff + ' months';
     } else if (year_diff < 2) {
@@ -138,12 +138,12 @@ function time_diff(timestamp) {
         base_string =  year_diff + " years";
     }
     else if (year_diff === 1000) {
-        base_string =  "a century"
+        base_string =  "A century"
     }
     else if (year_diff < 1000) {
         base_string =  Math.floor(year_diff/100) + " centuries";
     } else if (year_diff === 1000) {
-        base_string =  "a millennium"
+        base_string =  "A millennium"
     } else {
         base_string =  Math.floor(year_diff/1000) + " millennia";
     }

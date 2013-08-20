@@ -2,7 +2,7 @@ _path_name = window.location.pathname.replace(/\/$/, "");
 if (_path_name.match(/^\/?$/) || _path_name.match(/home\.html$/)) {
 
     evCheckHomeScroll = function () {
-        if ($(document).height() - ($(this).scrollTop() + $(window).height()) < 200) {
+        if ($(document).height() - ($(this).scrollTop() + $(window).height()) < 40) {
             var $last_book = $('#all-books').find('tr[data-book-id]').last();
             // make this global
             last_book_id = parseInt($last_book.attr('data-book-id'));
@@ -53,7 +53,8 @@ if (_path_name.match(/^\/?$/) || _path_name.match(/home\.html$/)) {
             }
 
             var $all_books = $('#all-books');
-            var cur_result, tot_appended;
+            var cur_result;
+            var tot_appended =0;
 
             for (var i = 0; i < dict.more_books.length; i++) {
 

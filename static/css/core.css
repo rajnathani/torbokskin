@@ -934,3 +934,9 @@ float: right;
 }
 
 
+@-moz-document url-prefix() {
+    textarea {
+        height: 3em;
+    }
+}
+
